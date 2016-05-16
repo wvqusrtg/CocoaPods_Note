@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<!-- saved from url=(0046)http://www.henishuo.com/podfile-use-perfectly/ -->
+<html lang="zh-CN" itemscope="" itemtype="http://schema.org/WebSite" prefix="og: http://ogp.me/ns#"><!--<![endif]--><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><script charset="utf-8" async="" src="./玩转Podfile _ 标哥的技术博客_files/snippetcacher.php"></script><script src="./玩转Podfile _ 标哥的技术博客_files/hm.js"></script><script charset="utf-8" async="" src="./玩转Podfile _ 标哥的技术博客_files/snippetcacher(1).php"></script><script charset="utf-8" async="" src="./玩转Podfile _ 标哥的技术博客_files/snippetcacher(2).php"></script>
+ 
+<meta name="google-site-verification" content="UCCdcGd6bNs3R79E9lyUXj9r1AI1drfJm5spO7MofvY">
+<meta name="baidu-site-verification" content="RaWNZSt4WW">
+
+<meta name="viewport" content="width=device-width">
+<meta name="author" content="标哥">
+<title>玩转Podfile | 标哥的技术博客</title>
+<link rel="profile" href="http://gmpg.org/xfn/11">
+<link rel="pingback" href="http://www.henishuo.com/xmlrpc.php">
+<!--[if lt IE 9]>
+	<script src="http://www.henishuo.com/wp-content/themes/twentyfourteen/js/html5.js"></script>
+	<![endif]-->
+ 
+<meta name="description" itemprop="description" content="前言 经常使用CocoaPods来管理iOS项目中的第三方库，但是我们要使用CocoaPods来管理第三方库，前提是要写好Podfile文件，通过这个文件来配置第三方库与项目之间的依赖、版本等信息。 但是，我相信很少有人完整地学习过Podfile的语法规则，包括笔者在写本篇文章之前。今天，请大家与笔者一起来完整">
+<meta name="keywords" itemprop="keywords" content="podfile,pod,cocoapods,pods,ios,swift,objc,objective-c,objectives,oc,标哥,ios标哥,标哥ios,标哥的博客,标哥博客,标哥的技术博客,标哥技术博客,cocoapod,ios实战,ios开发,第三方库管理器">
+<link rel="canonical" href="http://www.henishuo.com/podfile-use-perfectly/">
+<meta property="og:title" content="玩转Podfile | 标哥的技术博客">
+<meta property="og:type" content="activity">
+<meta property="og:url" content="http://www.henishuo.com/podfile-use-perfectly/">
+<meta property="og:image" content="http://www.henishuo.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png">
+<meta property="og:site_name" content="标哥的技术博客">
+<meta property="og:description" content="前言 经常使用CocoaPods来管理iOS项目中的第三方库，但是我们要使用CocoaPods来管理第三方库，前提是要写好Podfile文件，通过这个文件来配置第三方库与项目之间的依赖、版本等信息。 但是，我相信很少有人完整地学习过Podfile的语法规则，包括笔者在写本篇文章之前。今天，请大家与笔者一起来完整地学习Podfile官方教程。 之前一直想写来着，因为包括笔者在内并没有深入学习过它的使用。如果对之不够了解，如何能做到善用之。因此，下面一起来探讨探讨吧！ 什么是Podfile 官方只有一句话说明什么是Podfile：The Podfile is a specification that describes the dependencies of the targets of one or more Xcode projects. 大概意思是：Podfile文件是一种规则描述，用于描述一或多个Xcode工程的targets之间的依赖。 Podfile可以很简单：    也可以很复杂：    这里只是抛砖引玉，继续往下看，如何一点点地掌握Podfile的语法规则。 Podfile全局配置 目前根据官方文档说明，Podfile全局配置只有一个命令：    官方说明它的作用是：Specifies the installation method to be used when CocoaPods installs this Podfile.（大概意思是：指定CocoaPods安装Podfile时所使用的安装方法） 例如：    目前支持的key有：    这个没有见过任何工程里边有人使用过，相信99%的人儿都是使用默认的全局配置。对于这几个key，官方也没有明确说明其功能！ 在我们日常开发中，我们可能永远不需要使用到此配置命令，因此大家不用太关注它！ Dependencies（依赖） CocoaPods就是用于管理第三方依赖的。我们通过Podfile文件配置来指定工程中的每个target之间与第三方之间的依赖。 有以下三个命令来管理依赖：  pod 指定特定依赖。比如指定依赖AFNetwroking podspec 提供简单的API来创建podspec target 在我们的工程中，通过target指定所依赖的范围。  Pod命令">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="玩转Podfile | 标哥的技术博客">
+<meta name="twitter:description" content="前言 经常使用CocoaPods来管理iOS项目中的第三方库，但是我们要使用CocoaPods来管理第三方库，前提是要写好Podfile文件，通过这个文件来配置第三方库与项目之间的依赖、版本等信息。 但是，我相信很少有人完整地学习过Podfile的语法规则，包括笔者在写本篇文章之前。今天，请大家与笔者一起来完整地学习Podfile官方教程。 之前一直想写来着，因为包括笔者在内并没有深入学习过它的使用。如果对之不够了解，如何能做到善用之。因此，下面一起来探讨探讨吧！ 什么是Podfile 官方只有一句话说明什么是Podfile：The Podfile is a specification that describes the dependencies of the targets of one or more Xcode projects. 大概意思是：Podfile文件是一种规则描述，用于描述一或多个Xcode工程的targets之间的依赖。 Podfile可以很简单：    也可以很复杂：    这里只是抛砖引玉，继续往下看，如何一点点地掌握Podfile的语法规则。 Podfile全局配置 目前根据官方文档说明，Podfile全局配置只有一个命令：    官方说明它的作用是：Specifies the installation method to be used when CocoaPods installs this Podfile.（大概意思是：指定CocoaPods安装Podfile时所使用的安装方法） 例如：    目前支持的key有：    这个没有见过任何工程里边有人使用过，相信99%的人儿都是使用默认的全局配置。对于这几个key，官方也没有明确说明其功能！ 在我们日常开发中，我们可能永远不需要使用到此配置命令，因此大家不用太关注它！ Dependencies（依赖） CocoaPods就是用于管理第三方依赖的。我们通过Podfile文件配置来指定工程中的每个target之间与第三方之间的依赖。 有以下三个命令来管理依赖：  pod 指定特定依赖。比如指定依赖AFNetwroking podspec 提供简单的API来创建podspec target 在我们的工程中，通过target指定所依赖的范围。  Pod命令">
+<meta name="twitter:image" content="http://www.henishuo.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png">
+<meta itemprop="image" content="http://www.henishuo.com/wp-content/plugins/all-in-one-seo-pack/images/default-user-image.png">
+ 
+<link rel="alternate" type="application/rss+xml" title="标哥的技术博客 » Feed" href="http://www.henishuo.com/feed/">
+<link rel="alternate" type="application/rss+xml" title="标哥的技术博客 » 评论Feed" href="http://www.henishuo.com/comments/feed/">
+<link rel="alternate" type="application/rss+xml" title="标哥的技术博客 » 玩转Podfile评论Feed" href="http://www.henishuo.com/podfile-use-perfectly/feed/">
+<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/72x72\/","ext":".png","source":{"concatemoji":"http:\/\/www.henishuo.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.4.3"}};
+			!function(a,b,c){function d(a){var c,d,e,f=b.createElement("canvas"),g=f.getContext&&f.getContext("2d"),h=String.fromCharCode;return g&&g.fillText?(g.textBaseline="top",g.font="600 32px Arial","flag"===a?(g.fillText(h(55356,56806,55356,56826),0,0),f.toDataURL().length>3e3):"diversity"===a?(g.fillText(h(55356,57221),0,0),c=g.getImageData(16,16,1,1).data,g.fillText(h(55356,57221,55356,57343),0,0),c=g.getImageData(16,16,1,1).data,e=c[0]+","+c[1]+","+c[2]+","+c[3],d!==e):("simple"===a?g.fillText(h(55357,56835),0,0):g.fillText(h(55356,57135),0,0),0!==g.getImageData(16,16,1,1).data[0])):!1}function e(a){var c=b.createElement("script");c.src=a,c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var f,g;c.supports={simple:d("simple"),flag:d("flag"),unicode8:d("unicode8"),diversity:d("diversity")},c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.simple&&c.supports.flag&&c.supports.unicode8&&c.supports.diversity||(g=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",g,!1),a.addEventListener("load",g,!1)):(a.attachEvent("onload",g),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),f=c.source||{},f.concatemoji?e(f.concatemoji):f.wpemoji&&f.twemoji&&(e(f.twemoji),e(f.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+<style type="text/css">img.wp-smiley,img.emoji{display:inline!important;border:none!important;box-shadow:none!important;height:1em!important;width:1em!important;margin:0 .07em!important;vertical-align:-0.1em!important;background:none!important;padding:0!important;}</style>
+<link rel="stylesheet" id="crayon-theme-familiar-copy-css" href="./玩转Podfile _ 标哥的技术博客_files/familiar-copy.css" type="text/css" media="all">
+<link rel="stylesheet" id="crayon-font-consolas-css" href="./玩转Podfile _ 标哥的技术博客_files/consolas.css" type="text/css" media="all">
+<link rel="stylesheet" id="genericons-css" href="./玩转Podfile _ 标哥的技术博客_files/genericons.css" type="text/css" media="all">
+<link rel="stylesheet" id="twentyfourteen-style-css" href="./玩转Podfile _ 标哥的技术博客_files/style.css" type="text/css" media="all">
+<!--[if lt IE 9]>
+<link rel='stylesheet' id='twentyfourteen-ie-css'  href='http://www.henishuo.com/wp-content/themes/twentyfourteen/css/ie.css?ver=20131205' type='text/css' media='all' />
+<![endif]-->
+<script type="text/javascript" src="./玩转Podfile _ 标哥的技术博客_files/jquery.js"></script>
+<script type="text/javascript" src="./玩转Podfile _ 标哥的技术博客_files/jquery-migrate.min.js"></script>
+<link rel="https://api.w.org/" href="http://www.henishuo.com/wp-json/">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://www.henishuo.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://www.henishuo.com/wp-includes/wlwmanifest.xml">
+<link rel="prev" title="Code Signing Entitlements file do not match" href="http://www.henishuo.com/entitlements-do-not-match/">
+<link rel="next" title="iOS任意进制转换" href="http://www.henishuo.com/ios-any-decimal-hex/">
+<meta name="generator" content="WordPress 4.4.3">
+<link rel="shortlink" href="http://www.henishuo.com/?p=715">
+<link rel="alternate" type="application/json+oembed" href="http://www.henishuo.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.henishuo.com%2Fpodfile-use-perfectly%2F">
+<link rel="alternate" type="text/xml+oembed" href="http://www.henishuo.com/wp-json/oembed/1.0/embed?url=http%3A%2F%2Fwww.henishuo.com%2Fpodfile-use-perfectly%2F&amp;format=xml">
+<style type="text/css" id="twentyfourteen-header-css">.site-title a{color:#08af3a;}</style>
+<link rel="icon" href="http://www.henishuo.com/wp-content/uploads/2016/03/cropped-logo-1-32x32.png" sizes="32x32">
+<link rel="icon" href="http://www.henishuo.com/wp-content/uploads/2016/03/cropped-logo-1-192x192.png" sizes="192x192">
+<link rel="apple-touch-icon-precomposed" href="http://www.henishuo.com/wp-content/uploads/2016/03/cropped-logo-1-180x180.png">
+<meta name="msapplication-TileImage" content="http://www.henishuo.com/wp-content/uploads/2016/03/cropped-logo-1-270x270.png">
+<style type="text/css">.bd-reward-stl{text-align:center;background:#f1f1f1;padding:10px 0;color:#666;width:auto;}.bd-reward-stl span{width:50px;height:50px;margin-top:0px;color:#fff;font:400 25px/50px 'microsoft yahei';background:#FEC22C}.bd-reward-stl-img{width:90px;outline:0;border-radius:10%;}.bd-reward-stl-img-tip{width:200px;outline:0;border-radius:10%;}</style>
+ 
+<script src="./玩转Podfile _ 标哥的技术博客_files/ds.js"></script>
+<script type="text/javascript" async="" charset="UTF-8" src="./玩转Podfile _ 标哥的技术博客_files/embed.js"></script><script src="./玩转Podfile _ 标哥的技术博客_files/share.js"></script><link rel="stylesheet" href="./玩转Podfile _ 标哥的技术博客_files/slide_share.css"><link type="text/css" rel="stylesheet" href="./玩转Podfile _ 标哥的技术博客_files/embed.bluebox.css"><style type="text/css">#ds-thread .ds-powered-by{display:none!important;}
+
+.ds-thread {
+  max-width:100%;
+  margin: 0 auto;
+ padding-bottom: 50px;
+}
+
+
+</style></head>
+<body class="single single-post postid-715 single-format-standard group-blog masthead-fixed full-width singular" style="width: 100%;max-width:100%;"><div id="BAIDU_DUP_fp_wrapper" style="position: absolute; left: -1px; bottom: -1px; z-index: 0; width: 0px; height: 0px; overflow: hidden; visibility: hidden; display: none;"><iframe id="BAIDU_DUP_fp_iframe" src="./玩转Podfile _ 标哥的技术博客_files/o.html" style="width: 0px; height: 0px; visibility: hidden; display: none;"></iframe></div>
+<div id="page" class="hfeed site" style="width: 100%;max-width:100%;">
+<header id="masthead" class="site-header" role="banner">
+<div class="header-main">
+<h1 class="site-title"><a href="http://www.henishuo.com/" rel="home">标哥的技术博客</a></h1>
+<div class="search-toggle">
+<a href="http://www.henishuo.com/podfile-use-perfectly/#search-container" class="screen-reader-text" aria-expanded="false" aria-controls="search-container">搜索</a>
+</div>
+<nav id="primary-navigation" class="site-navigation primary-navigation" role="navigation">
+<button class="menu-toggle">主菜单</button>
+<a class="screen-reader-text skip-link" href="http://www.henishuo.com/podfile-use-perfectly/#content">跳至内容</a>
+<div class="menu-%e5%af%bc%e8%88%aa%e8%8f%9c%e5%8d%95-container"><ul id="primary-menu" class="nav-menu"><li id="menu-item-271" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-home menu-item-271"><a href="http://www.henishuo.com/">首页</a></li>
+<li id="menu-item-272" class="menu-item menu-item-type-taxonomy menu-item-object-category current-post-ancestor current-menu-parent current-post-parent menu-item-272"><a href="http://www.henishuo.com/category/ios/">ios开发</a></li>
+<li id="menu-item-128" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-128"><a href="http://www.henishuo.com/category/swift/">Swift</a></li>
+<li id="menu-item-350" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-350"><a href="http://www.henishuo.com/ios-interview-entrance/">iOS面试宝典</a></li>
+<li id="menu-item-15" class="menu-item menu-item-type-taxonomy menu-item-object-category menu-item-15"><a href="http://www.henishuo.com/category/other-articles/">其它文章</a></li>
+<li id="menu-item-353" class="menu-item menu-item-type-post_type menu-item-object-post menu-item-353"><a href="http://www.henishuo.com/about-biaoge/">关于标哥</a></li>
+</ul></div> </nav>
+</div>
+<div id="search-container" class="search-box-wrapper hide">
+<div class="search-box">
+<form role="search" method="get" class="search-form" action="http://www.henishuo.com/">
+<label>
+<span class="screen-reader-text">搜索：</span>
+<input type="search" class="search-field" placeholder="搜索…" value="" name="s" title="搜索：">
+</label>
+<input type="submit" class="search-submit" value="搜索">
+</form> </div>
+</div>
+</header> 
+<div id="main" class="site-main">
+<div id="primary" class="content-area" style="margin-top: 0px;padding-top:0px;background-color: rgb(252,252,252);max-width:100%;">
+<div id="content" class="site-content" role="main" style="background-color: rgb(252,252,252);max-width:100%;">
+<article id="post-715" class="post-715 post type-post status-publish format-standard hentry category-ios category-third-party-manager tag-cocoapod tag-cocoapods tag-ios tag-pod tag-podfile" style="margin-bottom: 10px;padding-top: 40px;margin-left: auto;margin-right: auto;background-color: rgb(252, 252, 252);">
+<header class="entry-header" style="">
+<div class="entry-meta hyb-fl">
+<span class="cat-links"><a href="http://www.henishuo.com/category/ios/" rel="category tag">ios开发</a>、<a href="http://www.henishuo.com/category/third-party-manager/" rel="category tag">第三方库管理器</a></span>
+</div>
+<h1 class="entry-title">玩转Podfile</h1>
+<div style="margin-top: 10px; margin-bottom: 20px"></div>
+<div class="entry-meta hyb-fl">
+<span class="entry-date"><a href="http://www.henishuo.com/podfile-use-perfectly/" rel="bookmark"><time class="entry-date" datetime="2016-03-18T18:57:35+08:00">2016年3月18日</time></a></span> <span class="byline"><span class="author vcard"><a class="url fn n" href="http://www.henishuo.com/author/huangyibiao/" rel="author">黄仪标</a></span></span> <span class="comments-link"><a href="http://www.henishuo.com/podfile-use-perfectly/#comments" class="ds-thread-count" data-thread-key="715">2条评论</a></span>
+ 
+2,053 阅读 
+</div> 
+</header> 
+<div class="entry-content" style="">
+<h1 id="toc_0">前言</h1>
+<p>经常使用CocoaPods来管理iOS项目中的第三方库，但是我们要使用CocoaPods来管理第三方库，前提是要写好Podfile文件，通过这个文件来配置第三方库与项目之间的依赖、版本等信息。</p>
+<p>但是，我相信很少有人完整地学习过Podfile的语法规则，包括笔者在写本篇文章之前。今天，请大家与笔者一起来完整地学习Podfile官方教程。</p>
+<p>之前一直想写来着，因为包括笔者在内并没有深入学习过它的使用。如果对之不够了解，如何能做到善用之。因此，下面一起来探讨探讨吧！</p>
+<h1 id="toc_1">什么是Podfile</h1>
+<p>官方只有一句话说明什么是Podfile：The Podfile is a specification that describes the dependencies of the targets of one or more Xcode projects.</p>
+<p>大概意思是：Podfile文件是一种规则描述，用于描述一或多个Xcode工程的targets之间的依赖。</p>
+<p>Podfile可以很简单：</p><script>(function() {var s = "_" + Math.random().toString(36).slice(2);document.write("<div id=" + s + "></div>");(window.slotbydup=window.slotbydup || []).push({id: "2456100",container: s,size: "760,90",display: "inlay-fix"});})();</script><script charset="utf-8" src="./玩转Podfile _ 标哥的技术博客_files/fcwm"></script>
+<div>
+<div id="crayon-57393f382862f751470199" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382862f751470199-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382862f751470199-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f382862f751470199-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382862f751470199-4" style="height: 20px;">4</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382862f751470199-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382862f751470199-2"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'MyApp'</span></div><div class="crayon-line" id="crayon-57393f382862f751470199-3"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'AFNetworking'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 1.0'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f382862f751470199-4">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>也可以很复杂：</p>
+<div>
+<div id="crayon-57393f3828651518434891" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828651518434891-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-9" style="height: 20px;">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-10" style="height: 20px;">10</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-11" style="height: 20px;">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-12" style="height: 20px;">12</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-13" style="height: 20px;">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-14" style="height: 20px;">14</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-15" style="height: 20px;">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-16" style="height: 20px;">16</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-17" style="height: 20px;">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828651518434891-18" style="height: 20px;">18</div><div class="crayon-num" data-line="crayon-57393f3828651518434891-19" style="height: 20px;">19</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828651518434891-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-2"><span class="crayon-e ">platform </span><span class="crayon-v">:ios</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'9.0'</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-3"><span class="crayon-v">inhibit_all_warnings</span><span class="crayon-o">!</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-4">&nbsp;</div><div class="crayon-line" id="crayon-57393f3828651518434891-5"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'MyApp'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-6"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'ObjectiveSugar'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 0.5'</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-7">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-8"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">"MyAppTests"</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-9"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">inherit</span><span class="crayon-o">!</span><span class="crayon-h"> </span><span class="crayon-v">:search_paths</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-10"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'OCMock'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 2.0.1'</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-11"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-e">end</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-12"><span class="crayon-e">end</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-13">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-14"><span class="crayon-e">post_install </span><span class="crayon-st">do</span><span class="crayon-h"> </span><span class="crayon-o">|</span><span class="crayon-v">installer</span><span class="crayon-o">|</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-15"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">installer</span><span class="crayon-sy">.</span><span class="crayon-v">pods_project</span><span class="crayon-sy">.</span><span class="crayon-v">pod_targets</span><span class="crayon-sy">.</span><span class="crayon-e">each </span><span class="crayon-st">do</span><span class="crayon-h"> </span><span class="crayon-o">|</span><span class="crayon-v">target</span><span class="crayon-o">|</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-16"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">puts</span><span class="crayon-h"> </span><span class="crayon-s">"#{target.name}"</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-17"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-e">end</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828651518434891-18"><span class="crayon-v">end</span></div><div class="crayon-line" id="crayon-57393f3828651518434891-19">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>这里只是抛砖引玉，继续往下看，如何一点点地掌握Podfile的语法规则。</p>
+<h1 id="toc_2">Podfile全局配置</h1>
+<p>目前根据官方文档说明，Podfile全局配置只有一个命令：</p>
+<div>
+<div id="crayon-57393f3828657513213181" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828657513213181-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828657513213181-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828657513213181-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828657513213181-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828657513213181-2"><span class="crayon-v">install</span><span class="crayon-o">!</span></div><div class="crayon-line" id="crayon-57393f3828657513213181-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>官方说明它的作用是：Specifies the installation method to be used when CocoaPods installs this Podfile.（大概意思是：指定CocoaPods安装Podfile时所使用的安装方法）</p>
+<p>例如：</p>
+<div>
+<div id="crayon-57393f382865b935150756" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382865b935150756-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382865b935150756-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f382865b935150756-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382865b935150756-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f382865b935150756-5" style="height: 20px;">5</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382865b935150756-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382865b935150756-2"><span class="crayon-v">install</span><span class="crayon-o">!</span><span class="crayon-h"> </span><span class="crayon-s">'cocoapods'</span><span class="crayon-sy">,</span></div><div class="crayon-line" id="crayon-57393f382865b935150756-3"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-v">:deterministic_uuids</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-cn">false</span><span class="crayon-sy">,</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f382865b935150756-4"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </span><span class="crayon-v">:integrate_targets</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-cn">false</span></div><div class="crayon-line" id="crayon-57393f382865b935150756-5">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>目前支持的key有：</p>
+<div>
+<div id="crayon-57393f382865f864526043" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382865f864526043-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382865f864526043-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f382865f864526043-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382865f864526043-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f382865f864526043-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382865f864526043-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f382865f864526043-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382865f864526043-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f382865f864526043-9" style="height: 20px;">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382865f864526043-10" style="height: 20px;">10</div><div class="crayon-num" data-line="crayon-57393f382865f864526043-11" style="height: 20px;">11</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382865f864526043-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382865f864526043-2"><span class="crayon-v">:clean</span></div><div class="crayon-line" id="crayon-57393f382865f864526043-3">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382865f864526043-4"><span class="crayon-v">:deduplicate_targets</span></div><div class="crayon-line" id="crayon-57393f382865f864526043-5">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382865f864526043-6"><span class="crayon-v">:deterministic_uuids</span></div><div class="crayon-line" id="crayon-57393f382865f864526043-7">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382865f864526043-8"><span class="crayon-v">:integrate_targets</span></div><div class="crayon-line" id="crayon-57393f382865f864526043-9">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382865f864526043-10"><span class="crayon-v">:lock_pod_sources</span></div><div class="crayon-line" id="crayon-57393f382865f864526043-11">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>这个没有见过任何工程里边有人使用过，相信99%的人儿都是使用默认的全局配置。对于这几个key，官方也没有明确说明其功能！</p>
+<p>在我们日常开发中，我们可能永远不需要使用到此配置命令，因此大家不用太关注它！</p>
+<h1 id="toc_3">Dependencies（依赖）</h1>
+<p>CocoaPods就是用于管理第三方依赖的。我们通过Podfile文件配置来指定工程中的每个target之间与第三方之间的依赖。</p>
+<p>有以下三个命令来管理依赖：</p><script>(function() {var s = "_" + Math.random().toString(36).slice(2);document.write("<div id=" + s + "></div>");(window.slotbydup=window.slotbydup || []).push({id: "2457199",container: s,size: "760,90",display: "inlay-fix"});})();</script><script charset="utf-8" src="./玩转Podfile _ 标哥的技术博客_files/fcwm(1)"></script>
+<ul>
+<li>pod 指定特定依赖。比如指定依赖AFNetwroking</li>
+<li>podspec 提供简单的API来创建podspec</li>
+<li>target 在我们的工程中，通过target指定所依赖的范围。</li>
+</ul>
+<h3 id="toc_4">Pod命令</h3>
+<p>此命令用于指定工程的依赖。我们通过Pod命令指定所依赖的第三方及第三方库的版本范围。</p>
+<h4 id="toc_5">永远使用最新版本</h4>
+<div>
+<div id="crayon-57393f3828664310215601" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828664310215601-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828664310215601-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828664310215601-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828664310215601-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828664310215601-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'HYBMasonryAutoCellHeight'</span></div><div class="crayon-line" id="crayon-57393f3828664310215601-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>当我们永远使用远程仓库中的最新版本时，我们只需要指定仓库名即可。当有新的版本发布时，执行pod update命令，会更新至最新的版本。</p>
+<p>因为版本之间可能会存在很大的差异，因此我们不应该采用这种方式，而是指定版本范围或者指定特定版本。</p>
+<h4 id="toc_6">使用固定版本</h4>
+<div>
+<div id="crayon-57393f3828669903335653" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828669903335653-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828669903335653-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828669903335653-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828669903335653-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828669903335653-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'HYBLoopScrollView'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'2.0'</span></div><div class="crayon-line" id="crayon-57393f3828669903335653-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>当我们不希望版本更新，而是固定使用指定的版本时，我们应该这么写法。当远程有新的版本发布时，pod是不会去更新新版本的。由于版本变化可能较大，因此有时候我们希望这么做的。</p>
+<h4 id="toc_7">指定版本范围</h4>
+<div>
+<div id="crayon-57393f382866d650837772" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382866d650837772-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382866d650837772-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f382866d650837772-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382866d650837772-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382866d650837772-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'HYBUnicodeReadable'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt;1.1.0'</span></div><div class="crayon-line" id="crayon-57393f382866d650837772-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>当我们不要求固定版本号，而是指定某个范围时，我们会像上面这么写法。我相信大家在工程中见到最多的就是这种写法了吧。但是，我相信很多朋友并不知道这么写法的意思是什么。</p>
+<p>它的意思是：HYBUnicodeReadable的版本可以是1.1.0到2.0.0，但是不包括2.0.0。</p>
+<p>使用这种写法是很有用的，因此小版本的升级一般是fix bug，当有bug被fix时，我们确实应该更新。从1.9.9升级到2.0.0时，不会去更新到2.0.0版本。我们认为从2.0.0是一个大版本，大版本的发布，通常不是fix bug，而是增加功能或者改动较大。</p>
+<p>那么有哪些符号可以指定范围呢：</p>
+<ul>
+<li>&gt;= version 要求版本大于或者等于version，当有新版本时，都会更新至最新版本</li>
+<li>&lt; version 要求版本小于version，当超过version版本后，都不会再更新</li>
+<li>&lt;= version 要求版本小于或者等于version，当超过version版本后，都不会再更新</li>
+<li>~&gt; version 比如上面说明的version=1.1.0时，范围在[1.1.0, 2.0.0)。注意2.0.0是开区间，也就是不包括2.0.0。</li>
+</ul>
+<h4 id="toc_8">使用本地库</h4>
+<div>
+<div id="crayon-57393f3828672212138122" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828672212138122-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828672212138122-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828672212138122-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828672212138122-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828672212138122-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'AFNetworking'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:path</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'~/Documents/AFNetworking'</span></div><div class="crayon-line" id="crayon-57393f3828672212138122-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>如果我们的库是在本地的，那么我们可以通过这样的命令来指定。由于是引用目录，因此外部直接修改目录中的内容，CocoaPods也会更新到最新的，所以也挺不错的！</p><script>(function() {var s = "_" + Math.random().toString(36).slice(2);document.write("<div id=" + s + "></div>");(window.slotbydup=window.slotbydup || []).push({id: "2456159",container: s,size: "760,90",display: "inlay-fix"});})();</script><script charset="utf-8" src="./玩转Podfile _ 标哥的技术博客_files/fcwm(2)"></script>
+<h4 id="toc_9">通过仓库的podspec引入</h4>
+<p>Sometimes you may want to use the bleeding edge version of a Pod. Or a specific revision. If this is the case, you can specify that with your pod declaration.</p>
+<p>当我们需要使用库的混合边缘版本，或者指定的修订版本，我们可以通过指定像下面这样的声明。</p>
+<p>使用仓库的master（主干）:</p>
+<div>
+<div id="crayon-57393f3828677135754526" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828677135754526-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828677135754526-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828677135754526-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828677135754526-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828677135754526-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'AFNetworking'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:git</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'https://github.com/gowalla/AFNetworking.git'</span></div><div class="crayon-line" id="crayon-57393f3828677135754526-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>不是使用master，而是使用指定的分支:</p>
+<div>
+<div id="crayon-57393f382867b789252605" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382867b789252605-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382867b789252605-2" style="height: 40px;">2</div><div class="crayon-num" data-line="crayon-57393f382867b789252605-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382867b789252605-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382867b789252605-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'AFNetworking'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:git</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'https://github.com/gowalla/AFNetworking.git'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:branch</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'dev'</span></div><div class="crayon-line" id="crayon-57393f382867b789252605-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>使用指定的tag（标签，发布库的版本时，通常版本号与tag号是一致的）:</p>
+<div>
+<div id="crayon-57393f382867f675891408" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382867f675891408-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382867f675891408-2" style="height: 40px;">2</div><div class="crayon-num" data-line="crayon-57393f382867f675891408-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382867f675891408-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382867f675891408-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'AFNetworking'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:git</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'https://github.com/gowalla/AFNetworking.git'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:tag</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'0.7.0'</span></div><div class="crayon-line" id="crayon-57393f382867f675891408-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>使用指定的提交版本：</p>
+<div>
+<div id="crayon-57393f3828683774622127" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828683774622127-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828683774622127-2" style="height: 40px;">2</div><div class="crayon-num" data-line="crayon-57393f3828683774622127-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828683774622127-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828683774622127-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'AFNetworking'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:git</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'https://github.com/gowalla/AFNetworking.git'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:commit</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'082f8319af'</span></div><div class="crayon-line" id="crayon-57393f3828683774622127-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>官方明确说明要求podspec在根目录下：</p>
+<p>The podspec file is expected to be in the root of the repository, if this library does not have a podspec file in its repository yet, you will have to use one of the approaches outlined in the sections below.</p>
+<p>也就是说与工程同级！比如AFNetworking中的podspec文件与库目录是同级的，都在根目录下！</p>
+<h4 id="toc_10">从外部podspec引入</h4>
+<div>
+<div id="crayon-57393f3828687269459972" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828687269459972-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828687269459972-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828687269459972-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828687269459972-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828687269459972-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'JSONKit'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:podspec</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'https://example.com/JSONKit.podspec'</span></div><div class="crayon-line" id="crayon-57393f3828687269459972-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>如上，当我们发布到CocoaPods时，如果没有podspec不是在根目录下，而是在外部，可以通过’:podspec’命令来指定外部链接。</p>
+<h1 id="toc_11">podspec</h1>
+<p>Use just the dependencies of a Pod defined in the given podspec file. If no arguments are passed the first podspec in the root of the Podfile is used. It is intended to be used by the project of a library. Note: this does not include the sources derived from the podspec just the CocoaPods infrastructure.</p>
+<p>大概意思是：使用给定的podspec所指定的pod依赖。如果没有指定参数，根目录下的podspec会被使用。</p>
+<p>正常情况下，我们并不需要指定，一般所开源出来的库的podspec都是在根目录下，所以可放心地使用，不用考虑太多。</p>
+<p>例如：</p>
+<div>
+<div id="crayon-57393f382868c650758109" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382868c650758109-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382868c650758109-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f382868c650758109-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382868c650758109-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f382868c650758109-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382868c650758109-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f382868c650758109-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382868c650758109-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f382868c650758109-9" style="height: 20px;">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382868c650758109-10" style="height: 20px;">10</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382868c650758109-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382868c650758109-2"><span class="crayon-c">// 不指定表示使用根目录下的podspec，默认一般都会放在根目录下</span></div><div class="crayon-line" id="crayon-57393f382868c650758109-3"><span class="crayon-v">podspec</span><span class="crayon-h"> </span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f382868c650758109-4">&nbsp;</div><div class="crayon-line" id="crayon-57393f382868c650758109-5"><span class="crayon-c">// 如果podspec的名字与库名不一样，可以通过这样来指定</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f382868c650758109-6"><span class="crayon-v">podspec</span><span class="crayon-h"> </span><span class="crayon-v">:name</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'QuickDialog'</span></div><div class="crayon-line" id="crayon-57393f382868c650758109-7">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382868c650758109-8"><span class="crayon-c">// 如果podspec不是在根目录下，那么可以通过:path来指定路径</span></div><div class="crayon-line" id="crayon-57393f382868c650758109-9"><span class="crayon-v">podspec</span><span class="crayon-h"> </span><span class="crayon-v">:path</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'/Documents/PrettyKit/PrettyKit.podspec'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f382868c650758109-10">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h1 id="toc_12">target</h1>
+<p>Defines a CocoaPods target and scopes dependencies defined within the given block. A target should correspond to an Xcode target. By default the target includes the dependencies defined outside of the block, unless instructed not to inherit! them.</p>
+<p>大概意思是：在给定的块内定义pod的target（Xcode工程中的target）和指定依赖的范围。一个target应该与Xcode工程的target有关联。默认情况下，target会包含定义在块外的依赖，除非指定不使用inherit!来继承（说的是嵌套的块里的继承问题）</p>
+<p>例子：</p>
+<ol>
+<li>我们指定HYBTestProject这个target可以访问HYBMasonryAutoCellHeight库：</li>
+</ol>
+<div>
+<div id="crayon-57393f3828691826883873" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828691826883873-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828691826883873-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828691826883873-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828691826883873-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f3828691826883873-5" style="height: 20px;">5</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828691826883873-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828691826883873-2"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'HYBTestProject'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line" id="crayon-57393f3828691826883873-3"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'HYBMasonryAutoCellHeight'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt;1.1.0'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828691826883873-4"><span class="crayon-v">end</span></div><div class="crayon-line" id="crayon-57393f3828691826883873-5">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<ol>
+<li>指定HYBTestProject这个target可以访问SSZipArchive，但是它不能访问Nimble；但是，HYBTestProjectTests这个target可以访问Nimble，默认是继承块外的，而且这里指定了inherit!继承，因此它也能访问SSZipArchive：</li>
+</ol>
+<div>
+<div id="crayon-57393f3828695554289693" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828695554289693-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828695554289693-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828695554289693-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828695554289693-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f3828695554289693-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828695554289693-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f3828695554289693-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828695554289693-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f3828695554289693-9" style="height: 20px;">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828695554289693-10" style="height: 20px;">10</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828695554289693-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828695554289693-2"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'HYBTestProject'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line" id="crayon-57393f3828695554289693-3"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'SSZipArchive'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828695554289693-4">&nbsp;</div><div class="crayon-line" id="crayon-57393f3828695554289693-5"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'HYBTestProjectTests'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828695554289693-6"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">inherit</span><span class="crayon-o">!</span><span class="crayon-h"> </span><span class="crayon-v">:search_paths</span></div><div class="crayon-line" id="crayon-57393f3828695554289693-7"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Nimble'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828695554289693-8"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-e">end</span></div><div class="crayon-line" id="crayon-57393f3828695554289693-9"><span class="crayon-v">end</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828695554289693-10">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<ol>
+<li>target块内可以有多个target子块：</li>
+</ol>
+<div>
+<div id="crayon-57393f3828699489761777" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f3828699489761777-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-9" style="height: 20px;">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-10" style="height: 20px;">10</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-11" style="height: 20px;">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-12" style="height: 20px;">12</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-13" style="height: 20px;">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-14" style="height: 20px;">14</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-15" style="height: 20px;">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-16" style="height: 20px;">16</div><div class="crayon-num" data-line="crayon-57393f3828699489761777-17" style="height: 20px;">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f3828699489761777-18" style="height: 20px;">18</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f3828699489761777-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-2"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'ShowsApp'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line" id="crayon-57393f3828699489761777-3"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'ShowsKit'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-4">&nbsp;</div><div class="crayon-line" id="crayon-57393f3828699489761777-5"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-p"># 可以访问ShowsKit + ShowTVAuth，其中ShowsKit是继承于父层的</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-6"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'ShowsTV'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line" id="crayon-57393f3828699489761777-7"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'ShowTVAuth'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-8"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">end</span></div><div class="crayon-line" id="crayon-57393f3828699489761777-9">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-10"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-p"># 可以访问Specta + Expecta</span></div><div class="crayon-line" id="crayon-57393f3828699489761777-11"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-p"># 同时也可以访问ShowsKit，它是明确指定继承于父层的所有pod</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-12"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'ShowsTests'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line" id="crayon-57393f3828699489761777-13"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">inherit</span><span class="crayon-o">!</span><span class="crayon-h"> </span><span class="crayon-v">:search_paths</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-14"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Specta'</span></div><div class="crayon-line" id="crayon-57393f3828699489761777-15"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Expecta'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-16"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-e">end</span></div><div class="crayon-line" id="crayon-57393f3828699489761777-17"><span class="crayon-v">end</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f3828699489761777-18">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p><strong>注意：</strong>Inheriting only search paths。也就是说inherit! :search_paths这是固定的写法。</p>
+<h1 id="toc_13">Target configuration</h1>
+<p>这里的配置会使用和控制工程的生成。</p>
+<h3 id="toc_14">platform</h3>
+<div>
+<div id="crayon-57393f382869e808205774" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f382869e808205774-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382869e808205774-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f382869e808205774-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f382869e808205774-4" style="height: 20px;">4</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f382869e808205774-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f382869e808205774-2"><span class="crayon-v">platform</span><span class="crayon-h"> </span><span class="crayon-v">:ios</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'7.0'</span></div><div class="crayon-line" id="crayon-57393f382869e808205774-3"><span class="crayon-v">platform</span><span class="crayon-h"> </span><span class="crayon-v">:ios</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f382869e808205774-4">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>如果没有指定版本，官方默认值说明如下：</p>
+<p>CocoaPods provides a default deployment target if one is not specified. The current default values are 4.3 for iOS, 10.6 for OS X, 9.0 for tvOS and 2.0 for watchOS.</p>
+<p>也就是说，若不指定平台版本，各平台默认值如下：</p>
+<ul>
+<li>iOS：4.3</li>
+<li>OS X：10.6</li>
+<li>tvOS：9.0</li>
+<li>watchOS：2.0</li>
+</ul>
+<h3 id="toc_15">project</h3>
+<p>默认情况下是没有指定的，当没有指定时，会使用Podfile目录下与target同名的工程：</p>
+<div>
+<div id="crayon-57393f38286a2372731083" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286a2372731083-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a2372731083-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286a2372731083-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a2372731083-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286a2372731083-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a2372731083-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f38286a2372731083-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a2372731083-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f38286a2372731083-9" style="height: 20px;">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a2372731083-10" style="height: 20px;">10</div><div class="crayon-num" data-line="crayon-57393f38286a2372731083-11" style="height: 20px;">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a2372731083-12" style="height: 20px;">12</div><div class="crayon-num" data-line="crayon-57393f38286a2372731083-13" style="height: 20px;">13</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286a2372731083-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a2372731083-2"><span class="crayon-p"># MyGPSApp只有在FastGPS工程中才会链接</span></div><div class="crayon-line" id="crayon-57393f38286a2372731083-3"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'MyGPSApp'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a2372731083-4"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">project</span><span class="crayon-h"> </span><span class="crayon-s">'FastGPS'</span></div><div class="crayon-line" id="crayon-57393f38286a2372731083-5"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a2372731083-6"><span class="crayon-v">end</span></div><div class="crayon-line" id="crayon-57393f38286a2372731083-7">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a2372731083-8"><span class="crayon-p"># MyNotesApp这个target只有在FastNotes工程中才会链接</span></div><div class="crayon-line" id="crayon-57393f38286a2372731083-9"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'MyNotesApp'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a2372731083-10"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">project</span><span class="crayon-h"> </span><span class="crayon-s">'FastNotes'</span></div><div class="crayon-line" id="crayon-57393f38286a2372731083-11"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a2372731083-12"><span class="crayon-v">end</span></div><div class="crayon-line" id="crayon-57393f38286a2372731083-13">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>一般情况下，我们不指定project，直接使用：</p>
+<div>
+<div id="crayon-57393f38286a6908001299" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286a6908001299-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a6908001299-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286a6908001299-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286a6908001299-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286a6908001299-5" style="height: 20px;">5</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286a6908001299-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a6908001299-2"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'MyApp'</span><span class="crayon-h"> </span><span class="crayon-st">do</span></div><div class="crayon-line" id="crayon-57393f38286a6908001299-3"><span class="crayon-h">&nbsp;&nbsp; </span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-sy">.</span><span class="crayon-sy">.</span><span class="crayon-sy">.</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286a6908001299-4"><span class="crayon-v">end</span><span class="crayon-h"> </span></div><div class="crayon-line" id="crayon-57393f38286a6908001299-5">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h3 id="toc_16">inhibit_all_warnings!</h3>
+<p>inhibit_all_warnings!命令是不显示所引用的库中的警告信息。我们可以指定全局不显示警告信息，也可以指定某一个库不显示警告信息：</p>
+<div>
+<div id="crayon-57393f38286aa658812248" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286aa658812248-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286aa658812248-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286aa658812248-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286aa658812248-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286aa658812248-2"><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'SSZipArchive'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:inhibit_warnings</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-cn">true</span></div><div class="crayon-line" id="crayon-57393f38286aa658812248-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h3 id="toc_17">use_frameworks!</h3>
+<p>通过指定use_frameworks!要求生成的是framework而不是静态库。</p>
+<h1 id="toc_18">workspace</h1>
+<p>默认情况下，我们不需要指定，直接使用与Podfile所在目录的工程名一样就可以了。如果要指定另外的名称，而不是使用工程的名称，可以这样指定：</p>
+<div>
+<div id="crayon-57393f38286af102825073" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286af102825073-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286af102825073-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286af102825073-3" style="height: 20px;">3</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286af102825073-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286af102825073-2"><span class="crayon-v">workspace</span><span class="crayon-h"> </span><span class="crayon-s">'MyWorkspace'</span></div><div class="crayon-line" id="crayon-57393f38286af102825073-3">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h1 id="toc_19">source</h1>
+<p>source是指定pod的来源。如果不指定source，默认是使用CocoaPods官方的source。通常我们没有必要添加。</p>
+<div>
+<div id="crayon-57393f38286b3208578413" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286b3208578413-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286b3208578413-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286b3208578413-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286b3208578413-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286b3208578413-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286b3208578413-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f38286b3208578413-7" style="height: 20px;">7</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286b3208578413-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286b3208578413-2"><span class="crayon-c">// 如果不想使用官方的，而是在别的地方也有，可以这样指定</span></div><div class="crayon-line" id="crayon-57393f38286b3208578413-3"><span class="crayon-v">source</span><span class="crayon-h"> </span><span class="crayon-s">'https://github.com/artsy/Specs.git'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286b3208578413-4">&nbsp;</div><div class="crayon-line" id="crayon-57393f38286b3208578413-5"><span class="crayon-c">// 默认是官方的source</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286b3208578413-6"><span class="crayon-v">source</span><span class="crayon-h"> </span><span class="crayon-s">'https://github.com/CocoaPods/Specs.git'</span></div><div class="crayon-line" id="crayon-57393f38286b3208578413-7">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h1 id="toc_20">Hooks</h1>
+<p>Hooks可以叫它为勾子吧，与swizzling特性差不多，就是在某些操作之前，先勾起，而且让它执行我们特定的操作。</p>
+<h3 id="toc_21">plugin</h3>
+<p>Specifies the plugins that should be used during installation.</p>
+<p>Use this method to specify a plugin that should be used during installation, along with the options that should be passed to the plugin when it is invoked.</p>
+<p>例如，指定在安装期间使用cocoapods-keys和slather这两个插件：</p>
+<div>
+<div id="crayon-57393f38286b7001988592" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286b7001988592-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286b7001988592-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286b7001988592-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286b7001988592-4" style="height: 20px;">4</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286b7001988592-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286b7001988592-2"><span class="crayon-v">plugin</span><span class="crayon-h"> </span><span class="crayon-s">'cocoapods-keys'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-v">:keyring</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-o">&gt;</span><span class="crayon-h"> </span><span class="crayon-s">'Eidolon'</span></div><div class="crayon-line" id="crayon-57393f38286b7001988592-3"><span class="crayon-v">plugin</span><span class="crayon-h"> </span><span class="crayon-s">'slather'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286b7001988592-4">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h3 id="toc_22">pre_install</h3>
+<p>This hook allows you to make any changes to the Pods after they have been downloaded but before they are installed.</p>
+<p>当我们下载完成，但是还没有安装之时，会勾起来，然后可以通过pre_install指定要做的事，做完后才进入安装阶段。</p>
+<p>比如：在下载完成但未安装之前，我们就可以指定在干些什么：</p>
+<div>
+<div id="crayon-57393f38286bc423340994" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286bc423340994-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286bc423340994-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286bc423340994-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286bc423340994-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286bc423340994-5" style="height: 20px;">5</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286bc423340994-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286bc423340994-2"><span class="crayon-e">pre_install </span><span class="crayon-st">do</span><span class="crayon-h"> </span><span class="crayon-o">|</span><span class="crayon-v">installer</span><span class="crayon-o">|</span></div><div class="crayon-line" id="crayon-57393f38286bc423340994-3"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-p"># Do something fancy!</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286bc423340994-4"><span class="crayon-v">end</span></div><div class="crayon-line" id="crayon-57393f38286bc423340994-5">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h3 id="toc_23">post_install</h3>
+<p>既然有pre_install命令，自然会想到还有一个与之对应的命令。</p>
+<p>This hook allows you to make any last changes to the generated Xcode project before it is written to disk, or any other tasks you might want to perform.</p>
+<p>当我们安装完成，但是生成的工程还没有写入磁盘之时，我们可以指定要执行的操作。</p>
+<p>比如，我们可以在写入磁盘之前，修改一些工程的配置：</p>
+<div>
+<div id="crayon-57393f38286c0696831591" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286c0696831591-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c0696831591-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286c0696831591-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c0696831591-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286c0696831591-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c0696831591-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f38286c0696831591-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c0696831591-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f38286c0696831591-9" style="height: 20px;">9</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286c0696831591-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c0696831591-2"><span class="crayon-e">post_install </span><span class="crayon-st">do</span><span class="crayon-h"> </span><span class="crayon-o">|</span><span class="crayon-v">installer</span><span class="crayon-o">|</span></div><div class="crayon-line" id="crayon-57393f38286c0696831591-3"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">installer</span><span class="crayon-sy">.</span><span class="crayon-v">pods_project</span><span class="crayon-sy">.</span><span class="crayon-v">targets</span><span class="crayon-sy">.</span><span class="crayon-e">each </span><span class="crayon-st">do</span><span class="crayon-h"> </span><span class="crayon-o">|</span><span class="crayon-v">target</span><span class="crayon-o">|</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c0696831591-4"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">target</span><span class="crayon-sy">.</span><span class="crayon-v">build_configurations</span><span class="crayon-sy">.</span><span class="crayon-e">each </span><span class="crayon-st">do</span><span class="crayon-h"> </span><span class="crayon-o">|</span><span class="crayon-v">config</span><span class="crayon-o">|</span></div><div class="crayon-line" id="crayon-57393f38286c0696831591-5"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-v">config</span><span class="crayon-sy">.</span><span class="crayon-v">build_settings</span><span class="crayon-sy">[</span><span class="crayon-s">'GCC_ENABLE_OBJC_GC'</span><span class="crayon-sy">]</span><span class="crayon-h"> </span><span class="crayon-o">=</span><span class="crayon-h"> </span><span class="crayon-s">'supported'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c0696831591-6"><span class="crayon-h">&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="crayon-e">end</span></div><div class="crayon-line" id="crayon-57393f38286c0696831591-7"><span class="crayon-e">&nbsp;&nbsp;</span><span class="crayon-e">end</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c0696831591-8"><span class="crayon-v">end</span></div><div class="crayon-line" id="crayon-57393f38286c0696831591-9">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h1 id="toc_24">def</h1>
+<p>我们还可以通过def命令来声明一个pod集：</p>
+<div>
+<div id="crayon-57393f38286c4290323432" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286c4290323432-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c4290323432-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286c4290323432-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c4290323432-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286c4290323432-5" style="height: 20px;">5</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286c4290323432-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c4290323432-2"><span class="crayon-v">def</span><span class="crayon-h"> </span><span class="crayon-s">'CustomPods'</span></div><div class="crayon-line" id="crayon-57393f38286c4290323432-3"><span class="crayon-h">&nbsp;&nbsp; </span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'IQKeyboardManagerSwift'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c4290323432-4"><span class="crayon-v">end</span><span class="crayon-h"> </span></div><div class="crayon-line" id="crayon-57393f38286c4290323432-5">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>然后，我们就可以在需要引入的target处引入之：</p>
+<div>
+<div id="crayon-57393f38286c8452013115" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286c8452013115-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c8452013115-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286c8452013115-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286c8452013115-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286c8452013115-5" style="height: 20px;">5</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286c8452013115-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c8452013115-2"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'MyTarget'</span><span class="crayon-h"> </span><span class="crayon-st">do</span><span class="crayon-h"> </span></div><div class="crayon-line" id="crayon-57393f38286c8452013115-3"><span class="crayon-h">&nbsp;&nbsp; </span><span class="crayon-t">CustomPods</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286c8452013115-4"><span class="crayon-v">end</span><span class="crayon-h"> </span></div><div class="crayon-line" id="crayon-57393f38286c8452013115-5">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<p>这么写的好处是：如果有多个target，而不同target之间并不全包含，那么可以通过这种方式来分开引入。</p>
+<h1 id="toc_25">逗视项目的Podfile</h1>
+<p>下面是逗视项目的Podfile，这是经过笔者整理的：</p>
+<div>
+<div id="crayon-57393f38286cc822165213" class="crayon-syntax crayon-theme-familiar-copy crayon-font-consolas crayon-os-mac print-yes notranslate crayon-wrapped" data-settings=" minimize scroll-always disable-anim wrap" style="margin-top: 12px; margin-bottom: 12px; margin-right: 24px; font-size: 15px !important; line-height: 20px !important; height: auto;">
+<div class="crayon-plain-wrap"></div>
+<div class="crayon-main" style="position: relative; z-index: 1;">
+<table class="crayon-table">
+<tbody><tr class="crayon-row">
+<td class="crayon-nums " data-settings="show">
+<div class="crayon-nums-content" style="font-size: 15px !important; line-height: 20px !important;"><div class="crayon-num" data-line="crayon-57393f38286cc822165213-1" style="height: 20px;">1</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-2" style="height: 20px;">2</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-3" style="height: 20px;">3</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-4" style="height: 20px;">4</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-5" style="height: 20px;">5</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-6" style="height: 20px;">6</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-7" style="height: 20px;">7</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-8" style="height: 20px;">8</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-9" style="height: 20px;">9</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-10" style="height: 20px;">10</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-11" style="height: 20px;">11</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-12" style="height: 20px;">12</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-13" style="height: 20px;">13</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-14" style="height: 20px;">14</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-15" style="height: 20px;">15</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-16" style="height: 20px;">16</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-17" style="height: 20px;">17</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-18" style="height: 20px;">18</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-19" style="height: 20px;">19</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-20" style="height: 20px;">20</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-21" style="height: 20px;">21</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-22" style="height: 20px;">22</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-23" style="height: 20px;">23</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-24" style="height: 20px;">24</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-25" style="height: 20px;">25</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-26" style="height: 20px;">26</div><div class="crayon-num" data-line="crayon-57393f38286cc822165213-27" style="height: 20px;">27</div><div class="crayon-num crayon-striped-num" data-line="crayon-57393f38286cc822165213-28" style="height: 20px;">28</div></div>
+</td>
+<td class="crayon-code"><div class="crayon-pre" style="font-size: 15px !important; line-height: 20px !important; -moz-tab-size:4; -o-tab-size:4; -webkit-tab-size:4; tab-size:4;"><div class="crayon-line" id="crayon-57393f38286cc822165213-1">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-2"><span class="crayon-v">platform</span><span class="crayon-h"> </span><span class="crayon-v">:ios</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'8.0'</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-3"><span class="crayon-v">use_frameworks</span><span class="crayon-o">!</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-4"><span class="crayon-v">inhibit_all_warnings</span><span class="crayon-o">!</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-5">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-6"><span class="crayon-e">def </span><span class="crayon-e">shared_pods</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-7"><span class="crayon-e">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Alamofire'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 3.0'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-8"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Kingfisher'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 1.6'</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-9"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'MJRefresh'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-10"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'SDCycleScrollView'</span><span class="crayon-sy">,</span><span class="crayon-s">'~&gt; 1.3'</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-11"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'APParallaxHeader'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-12"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'RoundImageView'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 1.0.1'</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-13"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'StrechyParallaxScrollView'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 0.1'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-14"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'TextFieldEffects'</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-15"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'IQKeyboardManagerSwift'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-16"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'SwiftyJSON'</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-17"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Validator'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-18"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Qiniu'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 7.0'</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-19"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-v">pod</span><span class="crayon-h"> </span><span class="crayon-s">'Google-Mobile-Ads-SDK'</span><span class="crayon-sy">,</span><span class="crayon-h"> </span><span class="crayon-s">'~&gt; 7.0'</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-20"><span class="crayon-e">end</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-21">&nbsp;</div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-22">&nbsp;</div><div class="crayon-line" id="crayon-57393f38286cc822165213-23"><span class="crayon-v">target</span><span class="crayon-h"> </span><span class="crayon-s">'ds_ios'</span><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-st">do</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-24"><span class="crayon-h">&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-25"><span class="crayon-h">&nbsp;&nbsp;</span><span class="crayon-e">shared_pods</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-26"><span class="crayon-e">&nbsp;&nbsp;</span></div><div class="crayon-line" id="crayon-57393f38286cc822165213-27"><span class="crayon-v">end</span></div><div class="crayon-line crayon-striped-line" id="crayon-57393f38286cc822165213-28">&nbsp;</div></div></td>
+</tr>
+</tbody></table>
+</div>
+</div>
+</div>
+<h1 id="toc_26">最后</h1>
+<p>如果文中有任何的纰漏，欢迎大家指出。分享无止境，希望能够帮助大家解疑！</p>
+<h1 id="toc_27">参考</h1>
+<p>【<a href="https://guides.cocoapods.org/syntax/podfile.html#podfile">官方文档说明</a>】</p>
+ 
+<h1>关注标哥</h1>
+<table>
+<thead>
+<tr>
+<th>联系方式</th>
+<th>关注</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>合作联系群</td>
+<td><a>347363861</a></td>
+<td>接项目、私活</td>
+</tr>
+<tr>
+<td>iOS直播音视频技术</td>
+<td>256239496</td>
+<td>实名制且群规严，定期清理</td>
+</tr>
+<tr>
+<td>标哥博客iOS交流群</td>
+<td>552095943(新)</td>
+<td>群里很活跃，定期清理</td>
+</tr>
+<tr>
+<td>标哥博客iOS交流群</td>
+<td>324400294(满)|494669518(满)|494669518(满)|250351140(满)</td>
+<td>群里很活跃，定期清理</td>
+</tr>
+<tr>
+<td>微信公众号</td>
+<td>iOSDevShares或者iOS开发技术分享</td>
+<td>关注公众号阅读好文章</td>
+</tr>
+<tr>
+<td>新浪微博</td>
+<td><a href="http://weibo.com/u/5384637337">@标哥的技术博客</a></td>
+<td>关注微博动态</td>
+</tr>
+<tr>
+<td>GITHUB</td>
+<td><a href="https://github.com/CoderJackyHuang">CoderJackyHuang</a></td>
+<td>文章Demo都在GITHUB</td>
+</tr>
+<tr>
+<td>联系标哥</td>
+<td><a href="http://www.henishuo.com/about-biaoge/">关于标哥</a></td>
+<td>保持活跃在最前线</td>
+</tr>
+</tbody>
+</table>
+<div class="postcopyright" style="margin-top:30px;margin-bottom:30px;">
+<strong>版权声明：</strong>本文为<a href="http://www.henishuo.com/podfile-use-perfectly/">【标哥的技术博客】</a>原创出品，欢迎转载，转载时请注明出处！
+</div>
+<div class="bd-reward-stl">
+<img class="bd-reward-stl-img" src="./玩转Podfile _ 标哥的技术博客_files/支付宝.png" alt="支付宝打赏">
+<img class="bd-reward-stl-img-tip" src="./玩转Podfile _ 标哥的技术博客_files/QQ20160316-2@2x-e1458097655909.png">
+<img class="bd-reward-stl-img" src="./玩转Podfile _ 标哥的技术博客_files/wxpay.png" alt="微信打赏">
+</div>
+</div> 
+<footer class="entry-meta" style="padding-bottom: 0px;"><span class="tag-links"><a href="http://www.henishuo.com/tag/cocoapod/" rel="tag">cocoapod</a><a href="http://www.henishuo.com/tag/cocoapods/" rel="tag">cocoapods</a><a href="http://www.henishuo.com/tag/ios%e5%ae%9e%e6%88%98/" rel="tag">ios实战</a><a href="http://www.henishuo.com/tag/ios%e5%bc%80%e5%8f%91/" rel="tag">ios开发</a><a href="http://www.henishuo.com/tag/pod/" rel="tag">pod</a><a href="http://www.henishuo.com/tag/podfile/" rel="tag">podfile</a></span></footer></article>  <nav class="navigation post-navigation" role="navigation">
+<h1 class="screen-reader-text">文章导航</h1>
+<div class="nav-links">
+<a href="http://www.henishuo.com/entitlements-do-not-match/" rel="prev"><span class="meta-nav">上一文章</span>Code Signing Entitlements file do not match</a><a href="http://www.henishuo.com/ios-any-decimal-hex/" rel="next"><span class="meta-nav">下一文章</span>iOS任意进制转换</a> </div> 
+</nav> 
+<script type="text/javascript">
+var duoshuoQuery = {"short_name":"biaogeblog","sso":{"login":"http:\/\/www.henishuo.com\/wp-login.php?action=duoshuo_login","logout":"http:\/\/www.henishuo.com\/wp-login.php?action=logout&_wpnonce=196720e24e"},"theme":"bluebox","stylePatch":"wordpress\/Twenty_Fourteen"};
+duoshuoQuery.sso.login += '&redirect_to=' + encodeURIComponent(window.location.href);
+duoshuoQuery.sso.logout += '&redirect_to=' + encodeURIComponent(window.location.href);
+(function() {
+    var ds = document.createElement('script');
+    ds.type = 'text/javascript';
+    ds.async = true;
+    ds.charset = 'UTF-8';
+    ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(ds);
+})();
+</script><a name="comments"></a>
+<div class="ds-thread" data-thread-key="715" data-author-key="1" data-title="玩转Podfile" data-url="http://www.henishuo.com/podfile-use-perfectly/" id="ds-thread"><div id="ds-reset"><div class="ds-meta"><a href="javascript:void(0)" class="ds-like-thread-button ds-rounded"><span class="ds-icon ds-icon-heart"></span> <span class="ds-thread-like-text">喜欢</span><span class="ds-thread-cancel-like">取消喜欢</span></a><span class="ds-like-panel"><span class="ds-highlight">1</span> 人喜欢</span></div><div class="ds-comments-info"><div class="ds-sort"><a class="ds-order-desc ds-current">最新</a><a class="ds-order-asc">最早</a><a class="ds-order-hot">最热</a></div><ul class="ds-comments-tabs"><li class="ds-tab"><a class="ds-comments-tab-duoshuo ds-current" href="javascript:void(0);"><span class="ds-highlight">2</span>条评论</a></li> <li class="ds-tab"><a class="ds-comments-tab-weibo" href="javascript:void(0);"><span class="ds-highlight">3</span>条新浪微博</a></li> </ul></div><ul class="ds-comments"><li class="ds-post" data-post-id="6278501712428794625"><div class="ds-post-self" data-post-id="6278501712428794625" data-thread-id="6263345035668882177" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6239990455929406209"><a rel="nofollow author" target="_blank" href="javascript:void(0)" onclick="this.href=&#39;http://biaogeblog.duoshuo.com/user-url/?user_id=6239990455929406209&#39;;" title="世界的旁观者"><img src="./玩转Podfile _ 标哥的技术博客_files/0" alt="世界的旁观者"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="javascript:void(0)" onclick="this.href=&#39;http://biaogeblog.duoshuo.com/user-url/?user_id=6239990455929406209&#39;;" rel="nofollow" target="_blank" data-user-id="6239990455929406209">世界的旁观者</a></div><p>不错不错</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-04-28T15:13:14+08:00" title="2016年4月28日 下午3:13:14">4月28日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li><li class="ds-post" data-post-id="6265186825283830530"><div class="ds-post-self" data-post-id="6265186825283830530" data-thread-id="6263345035668882177" data-root-id="0" data-source="duoshuo"><div class="ds-avatar" data-user-id="6259883745738752769"><a rel="nofollow author" target="_blank" href="http://t.qq.com/leitao3777" onclick="this.href=&#39;http://biaogeblog.duoshuo.com/user-url/?user_id=6259883745738752769&#39;;" title="雷跃昊阳"><img src="./玩转Podfile _ 标哥的技术博客_files/50" alt="雷跃昊阳"></a></div><div class="ds-comment-body"><div class="ds-comment-header"><a class="ds-user-name ds-highlight" data-qqt-account="" href="http://t.qq.com/leitao3777" onclick="this.href=&#39;http://biaogeblog.duoshuo.com/user-url/?user_id=6259883745738752769&#39;;" rel="nofollow" target="_blank" data-user-id="6259883745738752769">雷跃昊阳</a></div><p>赞一个</p><div class="ds-comment-footer ds-comment-actions"><span class="ds-time" datetime="2016-03-23T18:04:41+08:00" title="2016年3月23日 下午6:04:41">3月23日</span><a class="ds-post-reply" href="javascript:void(0);"><span class="ds-icon ds-icon-reply"></span>回复</a><a class="ds-post-likes" href="javascript:void(0);"><span class="ds-icon ds-icon-like"></span>顶</a><a class="ds-post-repost" href="javascript:void(0);"><span class="ds-icon ds-icon-share"></span>转发</a><a class="ds-post-report" href="javascript:void(0);"><span class="ds-icon ds-icon-report"></span>举报</a></div></div></div></li></ul><div class="ds-paginator" style="display: none;"><div class="ds-border"></div><a data-page="1" href="javascript:void(0);" class="ds-current">1</a></div><a name="respond"></a><div class="ds-toolbar"><div class="ds-account-control"><span class="ds-icon ds-icon-settings"></span> <span>帐号管理</span><ul><li><a class="ds-bind-more" href="javascript:void(0);" style="border-top: none">绑定更多</a></li><li><a target="_blank" href="http://duoshuo.com/settings/">设置</a></li><li><a rel="nofollow" href="http://biaogeblog.duoshuo.com/logout/?sso=1&amp;redirect_uri=http%3A%2F%2Fwww.henishuo.com%2Fwp-login.php%3Faction%3Dlogout%26_wpnonce%3D196720e24e%26redirect_to%3Dhttp%253A%252F%252Fwww.henishuo.com%252Fpodfile-use-perfectly%252F" style="border-bottom: none">登出</a></li></ul></div><div class="ds-visitor"><a class="ds-visitor-name" href="http://t.qq.com/wvqusrtg2011" target="_blank">倪新生</a><a class="ds-unread-comments-count" href="javascript:void(0);" title="你没有新回复" style="display: none;">0</a></div></div><div class="ds-replybox"><a class="ds-avatar" href="http://duoshuo.com/settings/avatar/" target="_blank" title="设置头像"><img src="./玩转Podfile _ 标哥的技术博客_files/229005.jpg" alt="倪新生"></a><form method="post"><input type="hidden" name="thread_id" value="6263345035668882177">
+<input type="hidden" name="parent_id" value="">
+<input type="hidden" name="nonce" value="56baf14455b72"><div class="ds-textarea-wrapper ds-rounded-top"><textarea name="message" title="Ctrl+Enter快捷提交" placeholder="说点什么吧…"></textarea><pre class="ds-hidden-text"></pre></div><div class="ds-post-toolbar"><div class="ds-post-options ds-gradient-bg"><span class="ds-sync"><input id="ds-sync-checkbox" type="checkbox" name="repost" value=""> <label for="ds-sync-checkbox">分享到:</label><a href="javascript:void(0)" class="ds-service-icon-grey ds-qqt" data-service="qqt" title="腾讯微博"></a><a href="javascript:void(0)" class="ds-service-icon-grey ds-qzone" data-service="qzone" title="QQ空间"></a></span></div><button class="ds-post-button" type="submit">发布</button><div class="ds-toolbar-buttons"><a class="ds-toolbar-button ds-add-emote" title="插入表情"></a><a class="ds-toolbar-button ds-add-image" title="插入图片"></a></div></div></form></div><p class="ds-powered-by"><a href="http://duoshuo.com/" target="_blank" rel="nofollow">标哥的技术博客正在使用多说</a></p></div></div>
+<script type="text/javascript">
+	if (typeof DUOSHUO !== 'undefined')
+		DUOSHUO.EmbedThread('.ds-thread');
+</script>
+<div id="ds-ssr">
+<ol id="commentlist">
+<li class="comment even thread-even depth-1" id="li-comment-701">
+<article id="comment-701" class="comment">
+<footer class="comment-meta">
+<cite class="comment-author vcard">
+<span class="fn"><a href="http://t.qq.com/leitao3777" rel="external nofollow" class="url">雷跃昊阳</a></span> on <a rel="nofollow" href="http://www.henishuo.com/podfile-use-perfectly/#comment-701"><time pubdate="" datetime="2016-03-23T18:04:41+08:00">2016年3月23日 at 18:04</time></a> <span class="says">said:</span> </cite> 
+</footer>
+<div class="comment-content"><p>赞一个</p>
+</div>
+</article> 
+</li> 
+<li class="comment odd alt thread-odd thread-alt depth-1" id="li-comment-910">
+<article id="comment-910" class="comment">
+<footer class="comment-meta">
+<cite class="comment-author vcard">
+<span class="fn">世界的旁观者</span> on <a rel="nofollow" href="http://www.henishuo.com/podfile-use-perfectly/#comment-910"><time pubdate="" datetime="2016-04-28T15:13:14+08:00">2016年4月28日 at 15:13</time></a> <span class="says">said:</span> </cite> 
+</footer>
+<div class="comment-content"><p>不错不错</p>
+</div>
+</article> 
+</li> 
+</ol>
+</div> </div> 
+</div> 
+<div id="secondary">
+<h2 class="site-description">天道酬勤、勤能补拙！欢迎大家关注标哥的技术博客，每篇文章末尾都有Q群等联系方式，随手点击广告，帮助博主养活博客！</h2>
+<div id="primary-sidebar" class="primary-sidebar widget-area" role="complementary">
+<aside id="views-7" class="widget widget_views"><h1 class="widget-title">阅读排行</h1><ul>
+<li><a href="http://www.henishuo.com/ios-interview-entrance/" title="iOS面试宝典">iOS面试宝典(36,120次)</a></li><li><a href="http://www.henishuo.com/ios-app-fully-code/" title="iOS完整App资源收集">iOS完整App资源收集(19,580次)</a></li><li><a href="http://www.henishuo.com/ios-baoku-interview-questions/" title="宝库iOS开发笔试题">宝库iOS开发笔试题(12,840次)</a></li><li><a href="http://www.henishuo.com/ios-thirdparty/" title="ios开发必备第三方库">ios开发必备第三方库(11,229次)</a></li><li><a href="http://www.henishuo.com/ios-interview-common-question/" title="iOS面试一般性问题">iOS面试一般性问题(9,741次)</a></li><li><a href="http://www.henishuo.com/objective-c-base-interview/" title="iOS基础笔试题集锦一">iOS基础笔试题集锦一(9,534次)</a></li><li><a href="http://www.henishuo.com/ios-needgo-interview/" title="要出发iOS笔试题">要出发iOS笔试题(9,427次)</a></li><li><a href="http://www.henishuo.com/ios-develop-must-know/" title="iOS开发必掌握">iOS开发必掌握(8,531次)</a></li><li><a href="http://www.henishuo.com/about-biaoge/" title="关于标哥">关于标哥(8,044次)</a></li><li><a href="http://www.henishuo.com/im-common-control/" title="即时通讯常用第三方库">即时通讯常用第三方库(7,932次)</a></li><li><a href="http://www.henishuo.com/base-on-afnetworking3-0-wrapper/" title="基于AFNetworking3...">基于AFNetworking3...(7,822次)</a></li><li><a href="http://www.henishuo.com/ios-block-memory-cycle/" title="iOS Block循环引用精讲">iOS Block循环引用精讲(7,726次)</a></li><li><a href="http://www.henishuo.com/ios-c-cpp-interview/" title="iOS的C/C++笔试题集锦">iOS的C/C++笔试题集锦(7,683次)</a></li><li><a href="http://www.henishuo.com/base-on-afnetworking-wrapper/" title="基于AFNetworking2...">基于AFNetworking2...(7,346次)</a></li><li><a href="http://www.henishuo.com/youku-interview-one/" title="YouKu iOS笔试题一">YouKu iOS笔试题一(6,431次)</a></li><li><a href="http://www.henishuo.com/interview-part-one/" title="招聘一个靠谱的iOS（上）">招聘一个靠谱的iOS（上）(6,368次)</a></li><li><a href="http://www.henishuo.com/objc-interview-two/" title="ios基础笔试题集锦二">ios基础笔试题集锦二(6,317次)</a></li><li><a href="http://www.henishuo.com/uibezierpath-draw/" title="UIBezierPath精讲">UIBezierPath精讲(6,141次)</a></li><li><a href="http://www.henishuo.com/masonry-cell-height-auto-calculate/" title="开源HYBMasonryAut...">开源HYBMasonryAut...(5,987次)</a></li><li><a href="http://www.henishuo.com/nanjing-jingdong-interview/" title="南京JingDong笔试题">南京JingDong笔试题(5,761次)</a></li></ul>
+</aside> <aside id="recent-posts-4" class="widget widget_recent_entries"> <h1 class="widget-title">最新文章</h1> <ul>
+<li>
+<a href="http://www.henishuo.com/mac_nginx_rtmp_server/">Mac搭建nginx+rtmp服务器</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/live-test-server/">直播测试地址</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/ios-live-confused/">直播基础解惑笔记</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/libxml-parser-not-found/">libxml/parser.h: No such file or directory</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/live-play-resource-collections/">直播方向的资源收集</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/hls-streaming-tool/">HLS Streaming Tool Download</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/alipay-sdk-entrance/">支付宝SDK入口</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/nav-photo-scale/">iOS导航条自由缩放头像效果</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/checkbox-checked-or-unchecked/">Checkbox状态设置及状态判断</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/coreanimation-tree-circle-expend/">高级动画-圆形树展开、收起动画</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/collectionview-layout-row/">CollectionView如何按行排列</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/donot-have-permission-view/">Xcode-you don’t have permission to view it</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/gcd-supqueue-prority/">GCD优先级子队列扫盲</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/gcd-serial-concurrency-queue/">GCD串行并发队列扫盲</a>
+</li>
+<li>
+<a href="http://www.henishuo.com/uuid-udid/">获取唯一UUID/UDID的方案</a>
+</li>
+</ul>
+</aside> <aside id="archives-2" class="widget widget_archive"><h1 class="widget-title">文章归档</h1> <ul>
+<li><a href="http://www.henishuo.com/2016/05/">2016年五月</a>&nbsp;(5)</li>
+<li><a href="http://www.henishuo.com/2016/04/">2016年四月</a>&nbsp;(11)</li>
+<li><a href="http://www.henishuo.com/2016/03/">2016年三月</a>&nbsp;(43)</li>
+<li><a href="http://www.henishuo.com/2016/02/">2016年二月</a>&nbsp;(41)</li>
+<li><a href="http://www.henishuo.com/2016/01/">2016年一月</a>&nbsp;(31)</li>
+<li><a href="http://www.henishuo.com/2015/12/">2015年十二月</a>&nbsp;(30)</li>
+<li><a href="http://www.henishuo.com/2015/11/">2015年十一月</a>&nbsp;(61)</li>
+</ul>
+</aside><aside id="categories-4" class="widget widget_categories"><h1 class="widget-title">分类目录</h1> <ul>
+<li class="cat-item cat-item-239"><a href="http://www.henishuo.com/category/block-subjects/" title="闭包相关学习资源">Block相关</a> (2)
+</li>
+<li class="cat-item cat-item-152"><a href="http://www.henishuo.com/category/uicollectionview-subject/" title="本专题是所有使用UICollectionView相关的教程及在使用中所遇到的问题解决方案总结。">CollectionView专题</a> (7)
+</li>
+<li class="cat-item cat-item-155"><a href="http://www.henishuo.com/category/ios-h5-js/" title="微信公众号：iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！
+">ios与H5交互</a> (11)
+</li>
+<li class="cat-item cat-item-91"><a href="http://www.henishuo.com/category/ios-animation-series/" title="关于ios动画的学习和总结文章。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">ios动画</a> (13)
+</li>
+<li class="cat-item cat-item-159"><a href="http://www.henishuo.com/category/ios%e5%a4%9a%e7%ba%bf%e7%a8%8b/" title="微信公众号：iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！
+">iOS多线程</a> (4)
+</li>
+<li class="cat-item cat-item-85"><a href="http://www.henishuo.com/category/ios-app-security/" title="关于iOS开发中常遇到的移动安全相关文章。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">iOS应用安全</a> (6)
+</li>
+<li class="cat-item cat-item-3"><a href="http://www.henishuo.com/category/ios/" title="欢迎爱好学习ios的同志们访问本博客，这里会有您需要的好文章，欢迎转发、分享。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">ios开发</a> (187)
+</li>
+<li class="cat-item cat-item-149"><a href="http://www.henishuo.com/category/ios%e5%bc%80%e5%8f%91%e6%97%a5%e5%b8%b8tips/" title="微信公众号：iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！
+">iOS开发日常Tips</a> (18)
+</li>
+<li class="cat-item cat-item-49"><a href="http://www.henishuo.com/category/ios-interview-dictionary/" title="本篇文章总结多年来iOS开发人员面试常问到的问题，也希望能够带领刚入门的同志们走入职场。在准备去面试之前，你觉得自己到底有几斤几两呢？看看下面的问题吧！！！微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">iOS面试宝典</a> (23)
+</li>
+<li class="cat-item cat-item-251"><a href="http://www.henishuo.com/category/javascript/" title="业余所学javascript之笔记，记录所遇之坑，以示后来者！">JavaScript</a> (1)
+</li>
+<li class="cat-item cat-item-126"><a href="http://www.henishuo.com/category/php/" title="本专题为笔者的学习笔记。对于笔者而言，PHP并不熟悉，只是刚开始学习而已。若是PHP新手，可以一起学习；若是高手，请绕边走，谢谢！">PHP笔记</a> (4)
+</li>
+<li class="cat-item cat-item-116"><a href="http://www.henishuo.com/category/runtime/" title="关于iOS runtime系列文章知识。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">Runtime</a> (11)
+</li>
+<li class="cat-item cat-item-87"><a href="http://www.henishuo.com/category/socket/" title="关于iOS如何使用socket编程的文章.微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">Socket</a> (3)
+</li>
+<li class="cat-item cat-item-59"><a href="http://www.henishuo.com/category/swift/" title="如今苹果提供了新的开发语言swift，而这个开发语言使用的开发者也越来越多，这里是笔者在开发与学习过程中的总结，希望对大家有帮助。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">Swift</a> (20)
+</li>
+<li class="cat-item cat-item-119"><a href="http://www.henishuo.com/category/swift/swiftgettingstarted/" title="Swift教程系列文章。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">Swift基础教程</a> (8)
+</li>
+<li class="cat-item cat-item-183"><a href="http://www.henishuo.com/category/uitableview/">UITableView</a> (2)
+</li>
+<li class="cat-item cat-item-11"><a href="http://www.henishuo.com/category/xcode/" title="学习ios的同志们，这里记录着很多Xcode开发工具在使用过程中遇到的一些问题，如有问题请指出，谢谢！微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">Xcode</a> (4)
+</li>
+<li class="cat-item cat-item-144"><a href="http://www.henishuo.com/category/xmpp/" title="微信公众号：iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！
+">XMPP</a> (5)
+</li>
+<li class="cat-item cat-item-203"><a href="http://www.henishuo.com/category/code-segment/" title="在开发中常用到的一些小代码片段">代码片段</a> (9)
+</li>
+<li class="cat-item cat-item-1"><a href="http://www.henishuo.com/category/other-articles/" title="所有未指定分类的文章都会放到这里，欢迎大家阅读！微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">其它文章</a> (10)
+</li>
+<li class="cat-item cat-item-123"><a href="http://www.henishuo.com/category/media/" title="关于多媒体系列文章整理。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">多媒体</a> (3)
+</li>
+<li class="cat-item cat-item-148"><a href="http://www.henishuo.com/category/ios-resource/" title="微信公众号：iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！
+">开发学习资源</a> (5)
+</li>
+<li class="cat-item cat-item-16"><a href="http://www.henishuo.com/category/develop-kit/" title="欢迎大家访问标哥的技术博客，这里会将常用的开发工具使用教程写到这里。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">开发工具</a> (5)
+</li>
+<li class="cat-item cat-item-229"><a href="http://www.henishuo.com/category/dev-profile-subject/" title="开发证书相关内容专题">开发证书相关</a> (2)
+</li>
+<li class="cat-item cat-item-114"><a href="http://www.henishuo.com/category/opensource/" title="本专题为笔者的所有开源库，已经放在GITHUB上，全部支持Cocoapods，希望大家多多支持！微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">开源库</a> (8)
+</li>
+<li class="cat-item cat-item-135"><a href="http://www.henishuo.com/category/performance/" title="微信公众号：iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！
+">性能优化</a> (6)
+</li>
+<li class="cat-item cat-item-213"><a href="http://www.henishuo.com/category/data-struct-agorithm/" title="数据结构与算法相关学习专题">数据结构与算法</a> (6)
+</li>
+<li class="cat-item cat-item-180"><a href="http://www.henishuo.com/category/develop-crash-collect/" title="日常开发中所遇到的崩溃问题收集于此，以帮助大家在遇到同样的问题时，可以快速找到解决方案。">日常崩溃</a> (2)
+</li>
+<li class="cat-item cat-item-37"><a href="http://www.henishuo.com/category/servier/" title="欢迎大家访问标哥的技术博客，这里记录着与服务器相关的文章，希望对您有帮助。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">服务器</a> (2)
+</li>
+<li class="cat-item cat-item-163"><a href="http://www.henishuo.com/category/version-control/" title="关于开发中所使用的版本控制，比如GIT、SVN">版本控制</a> (3)
+</li>
+<li class="cat-item cat-item-255"><a href="http://www.henishuo.com/category/%e7%9b%b4%e6%92%ad/">直播</a> (4)
+</li>
+<li class="cat-item cat-item-202"><a href="http://www.henishuo.com/category/third-party-sdk/" title="所使用过的第三方SDK学习笔记">第三方SDK使用</a> (4)
+</li>
+<li class="cat-item cat-item-232"><a href="http://www.henishuo.com/category/third-party-manager/" title="iOS开发中第三方库管理器">第三方库管理器</a> (3)
+</li>
+<li class="cat-item cat-item-8"><a href="http://www.henishuo.com/category/website/" title="欢迎大家访问标哥的技术博客，这里记录着与网站开发相关的精彩文章，欢迎大家阅读，希望对大家有帮助。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">网站相关</a> (5)
+</li>
+<li class="cat-item cat-item-175"><a href="http://www.henishuo.com/category/network-subject/" title="网络相关的专题">网络相关</a> (2)
+</li>
+<li class="cat-item cat-item-77"><a href="http://www.henishuo.com/category/autolayout/" title="关于iOS开发中使用自动布局的相关技术文章。微信公众号iOSDevShares，QQ群1：324400294(满)，QQ群2：494669518，高级群：461252383(注明工作年限)。大部分文章为本博客原创文章，部分精彩好文章是转载文章，欢迎大家转载，转载请注明出处！">自动布局</a> (17)
+</li>
+</ul>
+</aside><aside id="nav_menu-2" class="widget widget_nav_menu"><h1 class="widget-title">友情链接</h1><div class="menu-%e7%a4%be%e4%ba%a4%e8%8f%9c%e5%8d%95-container"><ul id="menu-%e7%a4%be%e4%ba%a4%e8%8f%9c%e5%8d%95" class="menu"><li id="menu-item-285" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-285"><a href="https://github.com/CoderJackyHuang">标哥GITHUB</a></li>
+<li id="menu-item-287" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-287"><a href="http://blog.csdn.net/woaifen3344">标哥CSDN博客</a></li>
+<li id="menu-item-286" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-286"><a href="http://blog.csdn.net/y550918116j">阳君CSDN博客</a></li>
+<li id="menu-item-330" class="menu-item menu-item-type-custom menu-item-object-custom menu-item-330"><a href="http://blog.ibireme.com/">ibireme博客</a></li>
+</ul></div></aside><aside id="meta-2" class="widget widget_meta"><h1 class="widget-title">功能</h1> <ul>
+<li><a href="http://www.henishuo.com/wp-login.php?action=register">注册</a></li> <li><a href="http://www.henishuo.com/wp-login.php">登录</a></li>
+<li><a href="http://www.henishuo.com/feed/">文章<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="http://www.henishuo.com/comments/feed/">评论<abbr title="Really Simple Syndication">RSS</abbr></a></li>
+<li><a href="https://cn.wordpress.org/" title="基于WordPress，一个优美、先进的个人信息发布平台。">WordPress.org</a></li> </ul>
+</aside> </div> 
+</div> 
+</div> 
+<footer id="colophon" class="site-footer" role="contentinfo">
+<div class="site-info" style="margin: auto;clear: both;text-align: center">
+<a href="http://www.henishuo.com/">Copyright 2015 标哥的技术博客</a>
+&nbsp;|&nbsp;&nbsp;<a href="https://github.com/CoderJackyHuang">标哥的GITHUB</a>
+&nbsp;|&nbsp;&nbsp;<a href="http://www.henishuo.com/">文章总阅读量：511,365 次</a>
+&nbsp;|&nbsp;&nbsp;<a href="http://www.henishuo.com/">文章总数：222 篇</a>
+&nbsp;|&nbsp;&nbsp;<a href="http://www.henishuo.com/">评论总数：746 条</a>
+</div> 
+</footer> 
+</div> 
+<link rel="stylesheet" id="crayon-css" href="./玩转Podfile _ 标哥的技术博客_files/crayon.min.css" type="text/css" media="all">
+<script type="text/javascript">
+/* <![CDATA[ */
+var viewsCacheL10n = {"admin_ajax_url":"http:\/\/www.henishuo.com\/wp-admin\/admin-ajax.php","post_id":"715"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./玩转Podfile _ 标哥的技术博客_files/postviews-cache.js"></script>
+<script type="text/javascript" src="./玩转Podfile _ 标哥的技术博客_files/comment-reply.min.js"></script>
+<script type="text/javascript" src="./玩转Podfile _ 标哥的技术博客_files/functions.js"></script>
+<script type="text/javascript" src="./玩转Podfile _ 标哥的技术博客_files/wp-embed.min.js"></script>
+<script type="text/javascript">
+/* <![CDATA[ */
+var CrayonSyntaxSettings = {"version":"_2.7.2_beta","is_admin":"0","ajaxurl":"http:\/\/www.henishuo.com\/wp-admin\/admin-ajax.php","prefix":"crayon-","setting":"crayon-setting","selected":"crayon-setting-selected","changed":"crayon-setting-changed","special":"crayon-setting-special","orig_value":"data-orig-value","debug":""};
+var CrayonSyntaxStrings = {"copy":"\u4f7f\u7528 %s \u590d\u5236\uff0c\u4f7f\u7528 %s \u7c98\u8d34\u3002","minimize":"\u70b9\u51fb\u5c55\u5f00\u4ee3\u7801"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="./玩转Podfile _ 标哥的技术博客_files/crayon.min.js"></script>
+ 
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"slide":{"type":"slide","bdImg":"7","bdPos":"right","bdTop":"100"}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+ 
+ 
+ 
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?b4504f47a0d98fdbb5f8e2e9c8988a1c";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+
+ 
+ 
+ <div class="bdshare-slide-button-box bdshare-slide-style-r7" style="top: 100px; width: 0px; z-index: 99999; right: 0px;" data-bd-bind="1463377396413"><a href="http://www.henishuo.com/podfile-use-perfectly/#" onclick="return false;" class="bdshare-slide-button" style="left: -24px;"></a><div class="bdshare-slide-list-box" style="width: 0px; display: none;"><div class="bdshare-slide-top">分享到</div><div class="bdshare-slide-list"><ul class="bdshare-slide-list-ul" style="width: 226px;"></ul></div><div class="bdshare-slide-bottom" style="width: 226px;"><a href="http://www.henishuo.com/podfile-use-perfectly/#" onclick="return false;" class="slide-more" data-cmd="more">更多...</a></div></div></div><div id="ds-notify" style="top: 24px; right: 24px; display: none;"><div id="ds-reset"><a class="ds-logo" href="http://duoshuo.com/" target="_blank" title="多说"></a><ul class="ds-notify-unread"><li style="display:none;"><a data-type="unread-comments" href="javascript:void(0);">你有undefined条新回复</a></li><li style="display:none;"><a data-type="unread-notifications" href="javascript:void(0);">你有undefined条系统消息</a></li></ul></div></div></body></html>

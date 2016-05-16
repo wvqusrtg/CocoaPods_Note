@@ -1,0 +1,4 @@
+BAIDU_SSP_define({"tuid" : "2456100_0","queryid" : "99711f408c5632df","placement" : {"basic" : {"cname":"36058172_cpr","conBackEnv":1,"flowType":1,"groupId":304207,"rspFormat":1,"sellType":1,"sspId":8,"tuId":2456100,"userId":11067786}
+,"container" : {"anchoredType":1,"floated":{},"height":90,"sizeType":1,"slide":{},"width":760}
+,"fillstyle" : {"elements":[50],"layout":[1,2],"styleTemplateId":[60101],"styleType":3}
+,"userdefine" : "adp=1|at=3|conBW=1|pat=6|pih=0|piw=0|ptbg=90|ptp=0|ptt=0|rss1=#FFFFFF|rss2=#000000|titFF=%E5%BE%AE%E8%BD%AF%E9%9B%85%E9%BB%91|titFS=14|titSU=0|tn=baiduCustNativeAD","complement_type" : 7},"extends" : "&cbcw=760&cbch=90&cbsz=1","pdb_deliv" : {"deliv_id" : "0","deliv_des" : {},"brandad" : 0},"order_deliv" : {"deliv_id" : "0","demand_id" : "0"},"rtb_deliv" : {"deliv_id" : "2385975","demand_id" : "10090296"}});

@@ -1,0 +1,1 @@
+!function(){function a(){try{jQuery("[aliyun-lego-data]").each(function(a,b){var c=jQuery(b),d=c.attr("aliyun-lego-data");jQuery.getJSON(d+"?callback=?",function(a){var b=a.replace(/ali-mod\/\?\?/gi,"ali-mod/");c.html(b)})})}catch(a){}}window.jQuery&&(window.Aliyun_Lego_System_Manual_Init=a,jQuery(function(){a()}))}();
